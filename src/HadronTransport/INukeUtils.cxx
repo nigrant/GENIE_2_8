@@ -1789,3 +1789,99 @@ bool genie::utils::intranuke::PhaseSpaceDecay(
   return true;
 }
 
+//___________________________________________________________________________
+// Nucleon Production from pion absorbtion
+//___________________________________________________________________________
+double genie::utils::intranuke::AvgNucleonFromPiAbs(GHepParticle* p, int RemnA_in)
+{
+          //DDC - `Returns the average number of nucleons 
+          double ke = p->KinE() / units::MeV;
+          int pdgc = p->Pdg();
+
+          double ns0 = 0.0;
+
+          if( pdgc==kPdgPiP || pdgc==kPdgPi0 || pdgc==kPdgPiM || pdgc==kPdgKP || pdgc==kPdgKM){
+  
+            ns0 = .0001*(1.+ke/250.) * (RemnA_in-10)*(RemnA_in-10) + 3.5;
+
+          }else{
+            LOG("INukeUtils", pERROR) 
+            << " ERROR particle must be a pi of K"
+            << " Setting ns0 to -1.0";
+            ns0 = -1.0;
+          }
+
+          return ns0;
+
+
+
+}
+double genie::utils::intranuke::AvgDiffNucleonFromPiAbs(GHepParticle* p, int RemnA_in)
+{
+          //DDC - Returns the average difference between the number of protons and neutrons
+          double ke = p->KinE() / units::MeV;
+          int pdgc = p->Pdg();
+
+          double nd0 = 0.0;
+
+          if( pdgc==kPdgPiP || pdgc==kPdgPi0 || pdgc==kPdgPiM || pdgc==kPdgKP || pdgc==kPdgKM){
+
+            nd0 = (1.+ke/250.) - ((RemnA_in/200.)*(1. + 2.*ke/250.));
+
+          }else{
+            LOG("INukeUtils", pERROR)
+            << " ERROR particle must be a pi of K"
+            << " Setting nd0 to -1.0";
+            nd0 = -1.0;
+          }
+
+          return nd0;
+
+}
+
+double genie::utils::intranuke::WidthNucleonFromPiAbs(GHepParticle* p, int RemnA_in)
+{
+          //DDC - Returns the width of the distributions of the number of nucleons 
+          double ke = p->KinE() / units::MeV;
+          int pdgc = p->Pdg();
+
+          double Sig_ns = 0.0;
+
+          if( pdgc==kPdgPiP || pdgc==kPdgPi0 || pdgc==kPdgPiM || pdgc==kPdgKP || pdgc==kPdgKM){
+
+            Sig_ns = (10. + 4. * ke/250.)*TMath::Power(RemnA_in/250.,0.9); 
+
+          }else{
+            LOG("INukeUtils", pERROR)
+            << " ERROR particle must be a pi of K"
+            << " Setting Sig_ns to -1.0";
+            Sig_ns = -1.0;
+          }
+
+          return Sig_ns;
+
+}
+
+double genie::utils::intranuke::WidthNucleonDiffFromPiAbs(GHepParticle* p)
+{
+          //DDC - Returns the width of the distributions of the difference between the number of protons and neutrons
+          double ke = p->KinE() / units::MeV;
+          int pdgc = p->Pdg();
+
+          double Sig_nd = 0.0;
+
+          if( pdgc==kPdgPiP || pdgc==kPdgPi0 || pdgc==kPdgPiM || pdgc==kPdgKP || pdgc==kPdgKM){
+
+            Sig_nd = 4*(1 - TMath::Exp(-0.03*ke));
+
+          }else{
+            LOG("INukeUtils", pERROR)
+            << " ERROR particle must be a pi of K"
+            << " Setting Sig_nd to -1.0";
+            Sig_nd = -1.0;
+          }
+
+          return Sig_nd;
+
+}
+

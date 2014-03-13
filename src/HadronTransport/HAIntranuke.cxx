@@ -953,10 +953,20 @@ void HAIntranuke::Inelastic(
 	}
       else if ( pdgc==kPdgPiP || pdgc==kPdgPi0 || pdgc==kPdgPiM || pdgc==kPdgKP || pdgc==kPdgKM) //pion or kaon probe
 	{
-	  ns0 = .0001*(1.+ke/250.) * (fRemnA-10)*(fRemnA-10) + 3.5;
-	  nd0 = (1.+ke/250.) - ((fRemnA/200.)*(1. + 2.*ke/250.));
-	  Sig_ns = (10. + 4. * ke/250.)*TMath::Power(fRemnA/250.,0.9);  //(1. - TMath::Exp(-0.02*fRemnA));
-	  Sig_nd = 4*(1 - TMath::Exp(-0.03*ke));
+          //DDC - Replace these four lines with the following four lines.
+          //DDC - The same code is run, but it has beed extracted to the Utilities
+          //DDC - so that they can be used by reweighting functions used to alter the
+          //DDC - probability of selecting the number of nucleons ejected resulting from a pion absorption
+	    //ns0 = .0001*(1.+ke/250.) * (fRemnA-10)*(fRemnA-10) + 3.5;
+	    //nd0 = (1.+ke/250.) - ((fRemnA/200.)*(1. + 2.*ke/250.));
+	    //Sig_ns = (10. + 4. * ke/250.)*TMath::Power(fRemnA/250.,0.9);  //(1. - TMath::Exp(-0.02*fRemnA));
+	    //Sig_nd = 4*(1 - TMath::Exp(-0.03*ke));
+          //DDC - New method calls to replace the above four lines of code:
+          ns0 = genie::utils::intranuke::AvgNucleonFromPiAbs(p, fRemnA);
+          nd0 = genie::utils::intranuke::AvgDiffNucleonFromPiAbs(p, fRemnA); 
+          Sig_ns = genie::utils::intranuke::WidthNucleonFromPiAbs(p, fRemnA);
+          Sig_nd = genie::utils::intranuke::WidthNucleonDiffFromPiAbs(p);
+
 	  LOG("HAIntranuke", pINFO) << "pion or kaon absorption";
 	  LOG("HAIntranuke", pINFO) << "--> mean diff distr = " << nd0 << ", stand dev = " << Sig_nd;
 	  LOG("HAIntranuke", pINFO) << "--> mean sum distr = " << ns0 << ", Stand dev = " << Sig_ns;

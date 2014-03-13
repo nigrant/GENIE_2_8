@@ -107,6 +107,14 @@ namespace intranuke
     GHepRecord* ev, GHepParticle* p, const PDGCodeList & pdgv, TLorentzVector &RemnP4,
     double NucRmvE, EINukeMode mode=kIMdHA);
 
+
+  //! DDC - Utilities to calculate the mean a spread of the Gaussian PDF for the sum and differences of the number of nulceons produced in pion absorption
+  double AvgNucleonFromPiAbs(GHepParticle* p, int RemnA_in);
+  double AvgDiffNucleonFromPiAbs(GHepParticle* p, int RemnA_in);
+  double WidthNucleonFromPiAbs(GHepParticle* p, int RemnA_in);
+  double WidthNucleonDiffFromPiAbs(GHepParticle* p);
+
+
 }      // intranuke namespace
 }      // utils     namespace
 }      // genie     namespace
